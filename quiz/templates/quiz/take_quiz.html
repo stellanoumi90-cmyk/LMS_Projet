@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ quiz.title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        .box { background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin: 0 auto; }
+        .q-block { margin-bottom: 25px; padding: 15px; background: #fafafa; border-radius: 4px; }
+        .btn-submit { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 1em; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>📝 {{ quiz.title }}</h1>
+        <p>{{ quiz.description }}</p>
+        <form method="POST">
+            {% csrf_token %}
+            {% for question in questions %}
+            <div class="q-block">
+                <h4>{{ forloop.counter }}. {{ question.text }}</h4>
+                {% for choice in question.choices.all %}
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}" required>
+                    {{ choice.text }}
+                </label><br><br>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn-submit">✔️ Soumettre mes réponses</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Relevé de Notes</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        h1 { color: #333; }
+        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        .moyenne-box { background: #e3f2fd; padding: 15px; border-radius: 6px; margin-top: 20px; font-size: 1.1em; font-weight: bold; text-align: right; color: #0d47a1; }
+        .btn-back { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; font-weight: bold; }
+        .valide { color: green; font-weight: bold; }
+        .rattrapage { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <a href="/" class="btn-back">⬅️ Retour à l'accueil</a>
+        <h1>📊 Mon Relevé de Notes (Informatique L2)</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Code UE</th>
+                    <th>Intitulé de la Matière</th>
+                    <th>Note / 20</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in mes_notes %}
+                <tr>
+                    <td><strong>{{ grade.course.code }}</strong></td>
+                    <td>{{ grade.course.title }}</td>
+                    <td><strong>{{ grade.score }}</strong></td>
+                    <td>
+                        {% if grade.score >= 10 %}
+                            <span class="valide">✅ Validé</span>
+                        {% else %}
+                            <span class="rattrapage">❌ Rattrapage</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #777;">Aucune note n'a encore été publiée pour le moment.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if mes_notes %}
+            <div class="moyenne-box">Moyenne Générale Estimée : {{ moyenne }} / 20</div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

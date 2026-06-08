@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        .box { background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin: 0 auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .quiz-card { background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 5px; border-left: 5px solid #28a745; }
+        .btn { background: #28a745; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <a href="/" style="text-decoration: none; font-weight: bold; color: #007bff;">⬅️ Accueil</a>
+        <h1>🧠 Quiz en ligne (Informatique L2)</h1>
+        <hr>
+        {% for quiz in quizzes %}
+        <div class="quiz-card">
+            <h3>{{ quiz.title }}</h3>
+            <p>Matière : <strong>{{ quiz.course.title }}</strong></p>
+            <p>{{ quiz.description }}</p>
+            <a href="{% url 'take_quiz' quiz.id %}" class="btn">🚀 Commencer le test</a>
+        </div>
+        {% empty %}
+        <p>Aucun quiz n'est disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

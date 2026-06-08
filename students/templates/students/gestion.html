@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des Étudiants</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        h1, h2 { color: #333; }
+        .container { display: flex; gap: 40px; }
+        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; }
+        form input { display: block; width: 95%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn-back { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <a href="/" class="btn-back">⬅️ Retour à l'accueil</a>
+    <h1>Gestion des Étudiants</h1>
+
+    <div class="container">
+        <div class="box">
+            <h2>Ajouter un Étudiant</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="matricule" placeholder="Matricule (ex: 24X2043)" required>
+                <input type="text" name="first_name" placeholder="Prénom" required>
+                <input type="text" name="last_name" placeholder="Nom" required>
+                <input type="email" name="email" placeholder="Adresse Email" required>
+                <button type="submit">Enregistrer l'étudiant</button>
+            </form>
+        </div>
+
+        <div class="box">
+            <h2>Liste des Étudiants inscrits</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Matricule</th>
+                        <th>Nom Complet</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for etudiant in etudiants %}
+                    <tr>
+                        <td>{{ etudiant.matricule }}</td>
+                        <td>{{ etudiant.first_name }} {{ etudiant.last_name }}</td>
+                        <td>{{ etudiant.email }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #777;">Aucun étudiant inscrit pour le moment.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

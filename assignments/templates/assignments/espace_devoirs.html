@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Espace Devoirs</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto; }
+        .devoir-card { border-left: 5px solid #007bff; background: #f8f9fa; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .btn-submit { background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+        .btn-submit:hover { background: #218838; }
+        input[type="file"] { margin: 10px 0; }
+        .date-limite { color: #dc3545; font-weight: bold; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <a href="/" style="text-decoration: none; font-weight: bold; color: #007bff;">⬅️ Accueil</a>
+        <h1>📝 Espace de Rendu des Devoirs / TP</h1>
+        <p>Sélectionne le devoir correspondant et dépose ton travail avant la date limite.</p>
+        <hr>
+
+        {% for devoir in devoirs %}
+        <div class="devoir-card">
+            <h3>{{ devoir.title }} — <span style="color: #555;">{{ devoir.course.title }}</span></h3>
+            <p>{{ devoir.description }}</p>
+            <p class="date-limite">📅 À rendre avant le : {{ devoir.due_date|date:"d F Y à H:i" }}</p>
+            
+            <form method="POST" enctype="multipart/form-data" style="margin-top: 10px;">
+                {% csrf_token %}
+                <input type="hidden" name="assignment_id" value="{{ devoir.id }}">
+                <label for="file">Déposer mon rendu (Zip, PDF, Python) :</label><br>
+                <input type="file" name="devoir_file" required><br>
+                <button type="submit" class="btn-submit">📤 Envoyer mon travail</button>
+            </form>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: #777; font-style: italic;">Aucun devoir programmé pour le moment. Repose-toi !</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
