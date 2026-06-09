@@ -18,3 +18,5 @@ scipy==1.10.1
 streamlit==1.40.1
 click==7.0
 jinja2==3.1.6
+setuptools==68.0.0
+wheel==0.41.2
