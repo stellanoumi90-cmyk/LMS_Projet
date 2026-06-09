@@ -30,12 +30,3 @@ urlpatterns = [
     path('quiz/', include('quiz.urls')),
     path('assignments/', include('assignments.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
-# Script de secours pour créer l'admin automatiquement au chargement du site
-from django.contrib.auth import get_user_model
-try:
-    User = get_user_model()
-    if not User.objects.filter(username='stella').exists():
-        User.objects.create_superuser('stella', 'stella@example.com', 'Stella2006')
-        print("Compte administrateur cree avec succes !")
-except Exception as e:
-    print("Erreur création admin :", e)
