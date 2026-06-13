@@ -81,7 +81,7 @@ import uuid
 def generer_certificat_automatique(sender, instance, created, **kwargs):
     # On vérifie si la note saisie est supérieure ou égale à la moyenne (ex: 10/20)
     # Adapte 'instance.note' avec le nom exact de ton champ de note
-    if instance.note >= 10: 
+    if instance.note_obtenue >= 10: 
         # On vérifie si le certificat n'existe pas déjà pour éviter les doublons
         certificat_existe = Certificat.objects.filter(
             etudiant=instance.etudiant, 
