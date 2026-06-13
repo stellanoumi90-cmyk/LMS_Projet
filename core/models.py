@@ -72,29 +72,35 @@ class Certificat(models.Model):
             import uuid
             self.code_verification = f"CERT-{self.cours.code}-{uuid.uuid4().hex[:8].upper()}"
         super().save(*args, **kwargs)
-        
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-import uuid
-
-@receiver(post_save, sender=NoteEtudiant) 
-def generer_certificat_automatique(sender, instance, created, **kwargs):
-    # On vérifie si la note saisie est supérieure ou égale à la moyenne (ex: 10/20)
-    # Adapte 'instance.note' avec le nom exact de ton champ de note
-    if instance.note_obtenue >= 10: 
-        # On vérifie si le certificat n'existe pas déjà pour éviter les doublons
-        certificat_existe = Certificat.objects.filter(
-            etudiant=instance.etudiant, 
-            cours=instance.cours
-        ).exists()
-        
-        if not certificat_existe:
-            # Création automatique du certificat lié
-            Certificat.objects.create(
-                etudiant=instance.etudiant,
-                cours=instance.cours,
-                code_verification=str(uuid.uuid4())[:8].upper() # Génère un code unique court
-            )        
-
     def __str__(self):
         return f"Certificat {self.cours.name} - {self.etudiant.username}"        
+         
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+# On cible le modèle exact au singulier : NoteEtudiant
+@receiver(post_save, sender=NoteEtudiant)
+def generer_certificat_automatique(sender, instance, created, **kwargs):
+    # Récupération dynamique et sécurisée de la note (qu'elle s'appelle note ou note_obtenue)
+    note_valeur = getattr(instance, 'note', None) or getattr(instance, 'note_obtenue', None)
+    
+    if note_valeur is not None and note_valeur >= 10:
+        # Récupération de la liaison cours et étudiant
+        liaison_cours = getattr(instance, 'course', None) or getattr(instance, 'cours', None)
+        liaison_etudiant = getattr(instance, 'etudiant', None) or getattr(instance, 'user', None)
+        
+        if liaison_cours and liaison_etudiant:
+            # Vérifier si le certificat existe déjà pour éviter les doublons
+            certif_existe = Certificat.objects.filter(
+                etudiant=liaison_etudiant, 
+                cours=liaison_cours
+            ).exists()
+            
+            if not certif_existe:
+                Certificat.objects.create(
+                    etudiant=liaison_etudiant,
+                    cours=liaison_cours
+                )       
+
+   
+       
