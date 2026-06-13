@@ -133,3 +133,9 @@ STATIC_ROOT = BASE_DIR/'staticfiles'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR/'media'
+
+# Où renvoyer un étudiant non connecté s'il tente d'accéder à l'espace LMS
+LOGIN_URL = 'login'
+
+# La page de redirection par défaut après une connexion réussie
+LOGIN_REDIRECT_URL = 'home'

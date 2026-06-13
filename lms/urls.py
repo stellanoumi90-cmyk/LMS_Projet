@@ -18,12 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 from core.views import home, login_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='home'),
-    path('login/', login_view, name='login'),
+    path('', login_view, name='login'),
+    path('plateforme/', home, name='home'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='login'),name='logout'),
     path('students/', include('students.urls')),
     path('courses/', include('courses.urls')),
     path('grades/', include('grades.urls')),
