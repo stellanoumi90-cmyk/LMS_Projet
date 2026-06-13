@@ -28,8 +28,8 @@
             <form method="POST">
                 {% csrf_token %}
                 <input type="text" name="matricule" placeholder="Matricule (ex: 24X2043)" required>
-                <input type="text" name="first_name" placeholder="Prénom" required>
-                <input type="text" name="last_name" placeholder="Nom" required>
+                <input type="text" name="first_name" placeholder="Nom" required>
+                <input type="text" name="last_name" placeholder="Prenom" required>
                 <input type="email" name="email" placeholder="Adresse Email" required>
                 <button type="submit">Enregistrer l'étudiant</button>
             </form>
