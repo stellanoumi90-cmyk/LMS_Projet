@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ cours.name }} - LMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+    <div class="container bg-white p-4 rounded shadow">
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm mb-4">← Retour à l'accueil</a>
+        
+        <div class="border-bottom pb-3 mb-4">
+            <span class="badge bg-primary fs-6 mb-2">{{ cours.code }}</span>
+            <h1 class="fw-bold">{{ cours.name }}</h1>
+            <p class="text-muted">Enseignant responsable : <strong>{{ cours.enseignant.username|default:"Non assigné" }}</strong></p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <h4 class="mb-3 text-secondary">Leçons du module</h4>
+                {% for lecon in lecons %}
+                    <div class="card mb-3 border-0 bg-light shadow-sm">
+                        <div class="card-body">
+                            <h5 class="fw-bold">{{ lecon.titre }}</h5>
+                            <div class="mt-2">
+                                {% if lecon.document_pdf %}
+                                    <a href="{{ lecon.document_pdf.url }}" class="btn btn-danger btn-sm me-2" target="_blank">📄 Voir le cours PDF</a>
+                                {% endif %}
+                                {% if lecon.lien_video %}
+                                    <a href="{{ lecon.lien_video }}" class="btn btn-success btn-sm" target="_blank">🎬 Regarder la Vidéo</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-warning">Aucune leçon n'est disponible pour ce cours.</div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-success shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="fw-bold text-success">🎓 Votre Certification</h5>
+                        <p class="small text-muted">Délivré automatiquement dès que le module est validé à plus de 50% par l'administration.</p>
+                        <hr>
+        
+                        {% if certificat %}
+                            <div class="alert alert-success p-2 small">
+                                🎉 Félicitations ! Votre certificat est disponible.
+                            </div>
+                            <a href="{% url 'voir_certificat' certificat.id %}" class="btn btn-success w-100" target="_blank">
+                                👁️ Voir mon Certificat
+                            </a>
+                        {% else %}
+                            <div class="alert alert-warning p-2 small mb-0">
+                                ⏳ Certificat non encore délivré (Cours en cours de validation ou moyenne insuffisante).
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

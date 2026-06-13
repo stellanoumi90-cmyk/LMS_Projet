@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from core.views import home, login_view
+from core.views import home, login_view, courses_view, detail_cours, afficher_certificat, suivi_notes_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,4 +31,8 @@ urlpatterns = [
     path('grades/', include('grades.urls')),
     path('quiz/', include('quiz.urls')),
     path('assignments/', include('assignments.urls')),
+    path('courses/gestion_lms/', courses_view, name='courses_view'),
+    path('cours/<int:cours_id>/', detail_cours, name='detail_cours'),
+    path('certificat/<int:certificat_id>/', afficher_certificat, name='voir_certificat'),
+    path('mon-suivi-notes/', suivi_notes_view, name='suivi_notes'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

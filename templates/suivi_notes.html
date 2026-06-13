@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Suivi de Notes - LMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+
+    <div class="container bg-white p-4 rounded shadow-sm">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+            <h1 class="fw-bold text-dark">📊 Mon Carnet de Notes</h1>
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm">← Retour à l'accueil</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Code Module</th>
+                        <th>Nom du Module</th>
+                        <th>Note Obtenue</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for n in notes %}
+                    <tr>
+                        <td><span class="badge bg-secondary">{{ n.cours.code }}</span></td>
+                        <td class="fw-bold">{{ n.cours.name }}</td>
+                        <td>
+                            <span class="fs-5 fw-bold {% if n.note >= 10 %}text-success{% else %}text-danger{% endif %}">
+                                {{ n.note }}/20
+                            </span>
+                        </td>
+                        <td>
+                            {% if n.note >= 10 %}
+                                <span class="badge bg-success">🎉 Validé (Certificat disponible)</span>
+                            {% else %}
+                                <span class="badge bg-danger">⏳ Non validé</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center alert alert-info">Aucune note n'a encore été publiée par vos enseignants.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

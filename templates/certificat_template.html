@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificat de Réussite - {{ certificat.cours.name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .certificat-border {
+            border: 10px double #198754;
+            padding: 50px;
+            background-color: #fff;
+            position: relative;
+        }
+        .signature {
+            font-family: 'Courier New', Courier, monospace;
+            border-top: 1px solid #333;
+            margin-top: 40px;
+            display: inline-block;
+            width: 200px;
+        }
+    </style>
+</head>
+<body class="bg-secondary p-5">
+
+    <div class="container bg-white shadow-lg p-2 rounded">
+        <div class="certificat-border text-center">
+            <h4 class="text-success fw-bold tracking-wide">REPUBLIQUE DU CAMEROUN</h4>
+            <p class="text-muted small">Paix - Travail - Patrie</p>
+            <hr style="width: 20%; margin: 0 auto 30px auto;" class="border-success">
+
+            <h1 class="display-4 text-dark fw-bold my-4" style="font-family: Georgia, serif;">CERTIFICAT DE REUSSITE</h1>
+            <p class="lead text-muted">Il est certifié que l'étudiant(e) :</p>
+            
+            <h2 class="text-primary fw-bold my-3">{{ certificat.etudiant.username|upper }}</h2>
+            
+            <p class="lead text-muted">a validé avec succès l'ensemble des évaluations du module de cours :</p>
+            <h3 class="fw-bold text-dark mb-4">[{{ certificat.cours.code }}] - {{ certificat.cours.name }}</h3>
+            
+            <p class="text-muted mt-5">Fait à Yaoundé, le {{ certificat.date_delivrance|date:"d F Y" }}</p>
+
+            <div class="d-flex justify-content-between px-5 mt-5">
+                <div>
+                    <p class="small text-muted">Code de Vérification unique :<br><strong class="text-danger">{{ certificat.code_verification }}</strong></p>
+                </div>
+                <div>
+                    <div class="signature small text-dark fw-bold">Le Promoteur LMS<br>Dr. MESSI</div>
+                </div>
+            </div>
+            
+            <div class="mt-4 no-print">
+                <button onclick="window.print()" class="btn btn-outline-primary btn-sm">🖨️ Imprimer ou Sauvegarder en PDF</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

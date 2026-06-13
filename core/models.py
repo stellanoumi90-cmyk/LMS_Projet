@@ -72,6 +72,29 @@ class Certificat(models.Model):
             import uuid
             self.code_verification = f"CERT-{self.cours.code}-{uuid.uuid4().hex[:8].upper()}"
         super().save(*args, **kwargs)
+        
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+import uuid
+
+@receiver(post_save, sender=NoteEtudiant) 
+def generer_certificat_automatique(sender, instance, created, **kwargs):
+    # On vérifie si la note saisie est supérieure ou égale à la moyenne (ex: 10/20)
+    # Adapte 'instance.note' avec le nom exact de ton champ de note
+    if instance.note >= 10: 
+        # On vérifie si le certificat n'existe pas déjà pour éviter les doublons
+        certificat_existe = Certificat.objects.filter(
+            etudiant=instance.etudiant, 
+            cours=instance.cours
+        ).exists()
+        
+        if not certificat_existe:
+            # Création automatique du certificat lié
+            Certificat.objects.create(
+                etudiant=instance.etudiant,
+                cours=instance.cours,
+                code_verification=str(uuid.uuid4())[:8].upper() # Génère un code unique court
+            )        
 
     def __str__(self):
         return f"Certificat {self.cours.name} - {self.etudiant.username}"        

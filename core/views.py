@@ -3,11 +3,15 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .models import course
+from .models import Certificat
+from .models import NoteEtudiant
 
 # 1. Protection de la page d'accueil (Espace LMS)
 @login_required(login_url='login')
 def home(request):
-    return render(request, 'home.html')
+    tous_les_cours = course.objects.all()
+    return render(request, 'home.html', {'cours': tous_les_cours})
 
 # 2. Gestion de la connexion (Accepte le Nom d'utilisateur OU l'Adresse Email)
 def login_view(request):
@@ -41,6 +45,39 @@ def login_view(request):
             
     return render(request, 'login.html')
 
-# 3. Vue pour l'affichage de la gestion des cours
+# # 3. Vue pour l'affichage de la gestion des cours (Modifiée pour le Prof)
 def courses_view(request):
-    return render(request, 'gestion_cours.html')    
+    # On récupère tous les cours enregistrés en base de données
+    tous_les_cours = course.objects.all()
+    # On les envoie au template pour qu'ils s'affichent dynamiquement
+    return render(request, 'courses/gestion_cours.html', {'cours': tous_les_cours})
+
+# # 4. Nouvelle vue pour afficher les leçons, PDF et vidéos d'un cours cliqué
+from django.shortcuts import get_object_or_404
+from .models import Lecon
+
+def detail_cours(request, cours_id):
+    # Récupère le cours sélectionné ou renvoie une erreur 404 s'il n'existe pas
+    cours_selectionne = get_object_or_404(course, id=cours_id)
+    # Récupère toutes les leçons (leçons PDF / Vidéos) liées à ce cours précis
+    les_lecons = Lecon.objects.filter(cours=cours_selectionne)
+    # On cherche si un certificat a été généré pour cet étudiant et ce cours
+    certificat_etudiant = Certificat.objects.filter(etudiant=request.user, cours=cours_selectionne).first()
+    
+    return render(request, 'detail_cours.html', {
+        'cours': cours_selectionne,
+        'lecons': les_lecons,
+        'certificat': certificat_etudiant
+    })  
+    
+def afficher_certificat(request, certificat_id):
+    # On récupère le certificat s'il appartient bien à l'étudiant connecté
+     certificat = get_object_or_404(Certificat, id=certificat_id, etudiant=request.user)
+     return render(request, 'certificat_template.html', {'certificat': certificat})  
+     
+def suivi_notes_view(request):
+    # On récupère toutes les notes de l'étudiant actuellement connecté
+    mes_notes = NoteEtudiant.objects.filter(etudiant=request.user)
+    return render(request, 'suivi_notes.html', {'notes': mes_notes})    
+   
+      
