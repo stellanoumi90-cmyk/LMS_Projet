@@ -24,29 +24,44 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for n in notes %}
+                    {% for note in notes %}
                     <tr>
-                        <td><span class="badge bg-secondary">{{ n.cours.code }}</span></td>
-                        <td class="fw-bold">{{ n.cours.name }}</td>
                         <td>
-                            <span class="fs-5 fw-bold {% if n.note >= 10 %}text-success{% else %}text-danger{% endif %}">
-                                {{ n.note }}/20
-                            </span>
-                        </td>
-                        <td>
-                            {% if n.note >= 10 %}
-                                <span class="badge bg-success">🎉 Validé (Certificat disponible)</span>
+                            {% if note.evaluation %}
+                                {{ note.evaluation.lecon.course.code }}
                             {% else %}
-                                <span class="badge bg-danger">⏳ Non validé</span>
+                                {{ note.cours.code }}
                             {% endif %}
                         </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="text-center alert alert-info">Aucune note n'a encore été publiée par vos enseignants.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+        
+                        <td>
+                            {% if note.evaluation %}
+                                {{ note.evaluation.lecon.course.name }}
+                            {% else %}
+                                {{ note.cours.name }}
+                            {% endif %}
+                        </td>
+        
+                        <td class="text-danger font-weight-bold">
+                            {{ note.note_obtenue|default:note.note }}/20
+                        </td>
+        
+                        <td>
+                            {% if note.note_obtenue >= 10 or note.note >= 10 %}
+                                <span class="badge bg-success">Validé</span>
+                            {% else %}
+                                <span class="badge bg-danger">Non validé</span>
+                            {% endif %}
+                        </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                Aucune note trouvée pour l'utilisateur connecté ({{ request.user.username }}).
+                            </td>
+                        </tr>
+                        {% endfor %}
+                   </tbody>
             </table>
         </div>
     </div>
