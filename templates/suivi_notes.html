@@ -24,30 +24,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for note in notes %}
+                    {% for n in notes %}
                     <tr>
                         <td>
-                            {% if note.evaluation %}
-                                {{ note.evaluation.lecon.course.code }}
+                            {% if n.evaluation %}
+                                {{ n.evaluation.lecon.course.code }}
                             {% else %}
-                                {{ note.cours.code }}
+                                {{ n.cours.code }}
                             {% endif %}
                         </td>
         
                         <td>
-                            {% if note.evaluation %}
-                                {{ note.evaluation.lecon.course.name }}
+                            {% if n.evaluation %}
+                                {{ n.evaluation.lecon.course.name }}
                             {% else %}
-                                {{ note.cours.name }}
+                                {{ n.cours.name }}
                             {% endif %}
                         </td>
         
                         <td class="text-danger font-weight-bold">
-                            {{ note.note_obtenue|default:note.note }}/20
+                            {{ n.note_obtenue|default:n.note }}/20
                         </td>
         
                         <td>
-                            {% if note.note_obtenue >= 10 or note.note >= 10 %}
+                            {% if n.note_obtenue >= 10 or n.note >= 10 %}
                                 <span class="badge bg-success">Validé</span>
                             {% else %}
                                 <span class="badge bg-danger">Non validé</span>
