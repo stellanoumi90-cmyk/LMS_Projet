@@ -139,3 +139,8 @@ LOGIN_URL = 'login'
 
 # La page de redirection par défaut après une connexion réussie
 LOGIN_REDIRECT_URL = 'home'
+
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True                                                                                       
