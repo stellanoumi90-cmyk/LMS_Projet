@@ -76,8 +76,15 @@ def afficher_certificat(request, certificat_id):
      return render(request, 'certificat_template.html', {'certificat': certificat})  
      
 def suivi_notes_view(request):
-    # On récupère toutes les notes de l'étudiant actuellement connecté
-    mes_notes = NoteEtudiant.objects.filter(etudiant=request.user)
-    return render(request, 'suivi_notes.html', {'notes': mes_notes})    
+    # On extrait l'identifiant unique (ID) ou l'instance de l'utilisateur connecté
+    user_id = request.user.id
+    
+    # On cherche d'abord par l'identifiant numérique, puis par l'objet si nécessaire
+    try:
+        mes_notes = NoteEtudiant.objects.filter(etudiant_id=user_id)
+    except Exception:
+        mes_notes = NoteEtudiant.objects.filter(etudiant=request.user)
+        
+    return render(request, 'suivi_notes.html', {'notes': mes_notes})   
    
       
